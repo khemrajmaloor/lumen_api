@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -16,3 +18,23 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+//Admin register  group routes..
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->get('Admins',    
+        ['uses'=> 'AdminController@showAllAdmins']
+    );
+    $router->get('Admins/{id}', 
+        ['uses'=> 'AdminController@showOneAdmin']
+    );
+    $router->post('Admins', 
+        ['uses'=> 'AdminController@createAdmin']
+    );
+    $router->delete('Admins/{id}', 
+        ['uses'=> 'AdminController@deleteAdmin']
+    );
+    $router->put('Admins/{id}', 
+        ['uses'=> 'AdminController@updateAdmin']
+    );
+  });
+  

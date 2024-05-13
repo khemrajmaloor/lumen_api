@@ -37,3 +37,4 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         ['uses'=> 'AdminController@updateAdmin']
     );
   });
+  

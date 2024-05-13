@@ -1,5 +1,7 @@
 <?php
 
+use App\Admin;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -7,6 +9,16 @@ require_once __DIR__.'/../vendor/autoload.php';
 ))->bootstrap();
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
+
+// bootstrap/app.php
+
+$app->router->group([
+    'namespace' => 'App\Http\Controllers',
+], function ($router) {
+    require __DIR__.'/../routes/web.php'; // Include web routes
+    require __DIR__.'/../routes/api.php'; // Include API routes
+});
+
 
 /*
 |--------------------------------------------------------------------------

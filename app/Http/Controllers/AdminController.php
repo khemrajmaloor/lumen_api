@@ -1,13 +1,14 @@
 <?php
 namespace App\Http\Controllers;
-
-use App\Admin;
+use app\Admin;
+use app\Providers\AuthServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+    
     //Fetch all admin data..
     public function showAllAdmins()
     {
@@ -45,6 +46,26 @@ class AdminController extends Controller
         $admin->save();
 
         return response()->json(['message' => 'Admin registered successfully'], 201);
+    }
+    public function login(Request $request){
+        if(Auth::attempt(['user_email' => $request->user_email , 'user_pass' => $request->user_pass])){
+                $user = Auth::user();
+                $success['token'] =$user->createToken('MyApp')->plainTextToken;
+                $success['user_login'] = $user->user_login;
+                $response = [
+                    'success' => true,
+                    'data'=> $success,
+                    'message'=> 'user login succesfully',
+                ];
+                return response()->json($response , 200);
+
+        }else{
+            $response = [
+                'success' => false,
+                'message'=> 'Login faild!'
+            ];
+            return response()->json($response , 300);
+        }
     }
     //Update admin data..
     public function updateAdmin($id, Request $request)

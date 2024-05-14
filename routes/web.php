@@ -21,19 +21,19 @@ $router->get('/', function () use ($router) {
 
 //Admin register  group routes..
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('Admins',    
+    $router->get('admins',    
         ['uses'=> 'AdminController@showAllAdmins']
     );
-    $router->get('Admins/{id}', 
+    $router->get('admins/{id}', 
         ['uses'=> 'AdminController@showOneAdmin']
     );
-    $router->post('Admins', 
+    $router->post('admins', 
         ['uses'=> 'AdminController@createAdmin']
     );
-    $router->delete('Admins/{id}', 
+    $router->delete('admins/{id}', 
         ['uses'=> 'AdminController@deleteAdmin']
     );
-    $router->put('Admins/{id}', 
+    $router->put('admins/{id}', 
         ['uses'=> 'AdminController@updateAdmin']
     );
   });

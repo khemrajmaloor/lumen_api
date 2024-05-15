@@ -36,6 +36,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->put('admins/{id}', 
         ['uses'=> 'AdminController@updateAdmin']
     );
-  });
+});
   
-  $router->post('/login', 'AuthController@postLogin');
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+    $router->post('login', ['uses' => 'AuthController@postLogin']);
+    $router->post('create',['uses' => 'AuthController@createUser']);
+});

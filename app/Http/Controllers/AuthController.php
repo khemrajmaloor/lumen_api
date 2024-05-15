@@ -21,7 +21,7 @@ class AuthController extends Controller
         $this->jwt = $jwt;
     }
 
-    public function postLogin(Request $request)
+    public function userLogin(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email|max:255',
@@ -49,7 +49,14 @@ class AuthController extends Controller
         }
 
         // Return token if authentication successful
-        return response()->json(['token' => $token , 'response' => 'User '.Auth::user()->name .' login successfully']);
+        $response = response()->json(['token' => $token , 'response' => 'User '.Auth::user()->name .' login successfully']);
+        return $response;
+        if($response){
+            $EntranceLog = new User();
+            $EntranceLog->user_id = Auth::user()->id;
+            $EntranceLog->loged_in_at = date('Y-m-d H:i:s');
+            $EntranceLog->save();
+        }
     }
 
     public function createUser(Request $request)

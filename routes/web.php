@@ -40,6 +40,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
   
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('login', ['uses' => 'AuthController@postLogin']);
+    $router->post('login', ['uses' => 'AuthController@userLogin']);
     $router->post('create',['uses' => 'AuthController@createUser']);
 });

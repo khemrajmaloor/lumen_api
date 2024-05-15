@@ -49,7 +49,7 @@ class AuthController extends Controller
         }
 
         // Return token if authentication successful
-        return response()->json(['token' => $token]);
+        return response()->json(['token' => $token , 'response' => 'User '.Auth::user()->name .' login successfully']);
     }
 
     public function createUser(Request $request)

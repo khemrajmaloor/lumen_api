@@ -19,8 +19,10 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
 // User registeration and login route..
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('login', ['uses' => 'AuthController@userLogin']);
     $router->post('create',['uses' => 'AuthController@createUser']);
+    $router->post('login', ['uses' => 'AuthController@userLogin']);
+    $router->post('logout', ['uses' => 'AuthController@userLogout']);
 });

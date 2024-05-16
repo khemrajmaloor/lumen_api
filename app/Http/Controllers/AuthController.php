@@ -81,19 +81,36 @@ class AuthController extends Controller
 
         // Return token if authentication successful
         $response = response()->json(['token' => $token , 'response' => 'User '.Auth::user()->name .' login successfully']);
-           
         $existLoginId  = login_details::where('user_id', $user->id)->exists();
-       if(!$existLoginId){
-           $userData = new login_details();
-           $userData->user_id = $user->id;
-           $userData->login_time = Carbon::now();
-           $userData->save();
-           return $response;
-       }else{
+        if(!$existLoginId){
+            $userData             = new login_details();
+            $userData->user_id    = $user->id;
+            $userData->login_time = date('Y-m-d H:i:s');
+            $userData->save();
+            session_start();
+            return $response;
+        }else{
             return response()->json(['Response'=> 'User is already logged in !']);
-       }
+        }
         
     }
+    public function userLogout(Request $request)
+    {
+        // Assuming you have authenticated user available
+        $user = '10';
+        // Update logout time for login details associated with the user
+        $affectedRows = login_details::leftJoin('users', 'login_details.user_id', '=', 'users.id')
+        ->where('users.id', '10')
+        ->update(['login_details.logout_time' => date('Y-m-d H:i:s')]);
+        
+        if ($affectedRows > 0) {
+            session_destroy();
+            return response()->json(['response' => 'User LOGOUT']);
+        } else {
+            return response()->json(['response' => 'No logout records updated']);
+        }
+    }
+    
+    
+    
 }
-
-

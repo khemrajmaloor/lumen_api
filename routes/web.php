@@ -19,25 +19,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-//Admin register  group routes..
-$router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('admins',    
-        ['uses'=> 'AdminController@showAllAdmins']
-    );
-    $router->get('admins/{id}', 
-        ['uses'=> 'AdminController@showOneAdmin']
-    );
-    $router->post('admins', 
-        ['uses'=> 'AdminController@createAdmin']
-    );
-    $router->delete('admins/{id}', 
-        ['uses'=> 'AdminController@deleteAdmin']
-    );
-    $router->put('admins/{id}', 
-        ['uses'=> 'AdminController@updateAdmin']
-    );
-});
-  
+// User registeration and login route..
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('login', ['uses' => 'AuthController@postLogin']);
     $router->post('create',['uses' => 'AuthController@createUser']);

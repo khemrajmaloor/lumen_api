@@ -21,24 +21,23 @@ $router->get('/', function () use ($router) {
 
 //Admin register  group routes..
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('admins',    
+    $router->get('Admins',    
         ['uses'=> 'AdminController@showAllAdmins']
     );
-    $router->get('admins/{id}', 
+    $router->get('Admins/{id}', 
         ['uses'=> 'AdminController@showOneAdmin']
     );
-    $router->post('admins', 
+    $router->post('Admins', 
         ['uses'=> 'AdminController@createAdmin']
     );
-    $router->delete('admins/{id}', 
+    $router->delete('Admins/{id}', 
         ['uses'=> 'AdminController@deleteAdmin']
     );
-    $router->put('admins/{id}', 
+    $router->put('Admins/{id}', 
         ['uses'=> 'AdminController@updateAdmin']
+    );
+    $router->post('login/', 
+        ['uses'=> 'AdminController@login']    
     );
 });
   
-$router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('login', ['uses' => 'AuthController@postLogin']);
-    $router->post('create',['uses' => 'AuthController@createUser']);
-});

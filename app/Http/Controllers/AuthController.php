@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+
+// Create class for user register and login, & logout
 class AuthController extends Controller
 {
     /**
@@ -20,7 +22,34 @@ class AuthController extends Controller
     {
         $this->jwt = $jwt;
     }
+    // Create user.. 
+    public function createUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required',
+            'nicename' => 'nullable',
+            'user_url' => 'nullable|url',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Validation passed, proceed with creating the admin...
+        $admin = new User();
+        $admin->name     = $request->input('name');
+        $admin->email    = $request->input('email');
+        $admin->password = Hash::make($request->input('password'));
+        $admin->nicename = $request->input('name');
+        $admin->role     = 'admin'; 
+        $admin->user_registered = date('Y-m-d H:i:s');
+        $admin->save();
+
+        return response()->json(['message' => 'User registered successfully'], 201);
+    }
+    // User login here.. 
     public function userLogin(Request $request)
     {
         $this->validate($request, [
@@ -59,30 +88,4 @@ class AuthController extends Controller
         }
     }
 
-    public function createUser(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name'     => 'required',
-            'email'    => 'required|email|unique:users',
-            'password' => 'required',
-            'nicename' => 'nullable',
-            'user_url' => 'nullable|url',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        // Validation passed, proceed with creating the admin...
-        $admin = new User();
-        $admin->name     = $request->input('name');
-        $admin->email    = $request->input('email');
-        $admin->password = Hash::make($request->input('password'));
-        $admin->nicename = $request->input('name');
-        $admin->role     = 'admin'; 
-        $admin->user_registered = date('Y-m-d H:i:s');
-        $admin->save();
-
-        return response()->json(['message' => 'User registered successfully'], 201);
-    }
 }

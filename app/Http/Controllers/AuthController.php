@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\User; 
+use App\login_details; 
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -61,7 +63,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         $user = User::where('email', $credentials['email'])->first();
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['error' => 'User does not exist'], 404);
         }
 
         try {
@@ -79,13 +81,19 @@ class AuthController extends Controller
 
         // Return token if authentication successful
         $response = response()->json(['token' => $token , 'response' => 'User '.Auth::user()->name .' login successfully']);
-        return $response;
-        if($response){
-            $EntranceLog = new User();
-            $EntranceLog->user_id = Auth::user()->id;
-            $EntranceLog->loged_in_at = date('Y-m-d H:i:s');
-            $EntranceLog->save();
-        }
+           
+        $existLoginId  = login_details::where('user_id', $user->id)->exists();
+       if(!$existLoginId){
+           $userData = new login_details();
+           $userData->user_id = $user->id;
+           $userData->login_time = Carbon::now();
+           $userData->save();
+           return $response;
+       }else{
+            return response()->json(['Response'=> 'User is already logged in !']);
+       }
+        
     }
-
 }
+
+

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
@@ -19,25 +19,30 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-//Admin register  group routes..
+
+// Route::group([
+
+//     'middleware' => 'api',
+//     'prefix' => 'auth'
+
+// ], function ($router) {
+
+//     Route::post('login', 'AuthController@login');
+//     Route::post('logout', 'AuthController@logout');
+//     Route::post('me', 'AuthController@me');
+
+//     Route::post('refresh', 'AuthController@refresh');
+// });
+
 $router->group(['prefix' => 'api'], function () use ($router) {
-    $router->get('Admins',    
-        ['uses'=> 'AdminController@showAllAdmins']
-    );
-    $router->get('Admins/{id}', 
-        ['uses'=> 'AdminController@showOneAdmin']
-    );
-    $router->post('Admins', 
-        ['uses'=> 'AdminController@createAdmin']
-    );
-    $router->delete('Admins/{id}', 
-        ['uses'=> 'AdminController@deleteAdmin']
-    );
-    $router->put('Admins/{id}', 
-        ['uses'=> 'AdminController@updateAdmin']
-    );
-    $router->post('login/', 
-        ['uses'=> 'AdminController@login']    
-    );
+
+    $router->post('register', 'AuthController@register');
+    $router->post('login', 'AuthController@login');
+    $router->post('logout', 'AuthController@logout');
+    
 });
-  
+
+$router->group(['prefix'=>'api' , 'middleware'=>'auth'], function () use ($router) {
+    $router->get('me', 'AuthController@me');
+
+});
